@@ -1,3 +1,5 @@
+[![Ruby CI](https://github.com/osyo-manga/gem-kenma/actions/workflows/kenma.yml/badge.svg)](https://github.com/osyo-manga/gem-kenma/actions/workflows/kenma.yml)
+
 # Kenma
 
 ## Installation
