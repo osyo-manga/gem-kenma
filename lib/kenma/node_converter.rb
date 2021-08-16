@@ -52,11 +52,16 @@ module Kenma
       end.then { |node| block.call(node, nil) }
     end
 
-    def send_node(method_name, *args)
+    def send_node(method_name, node, parent)
       if respond_to?(method_name, true)
-        send(method_name, *args)
+        result = send(method_name, node, parent)
+        if result == node
+          node_missing(node, parent)
+        else
+          result
+        end
       else
-        node_missing(*args)
+        node_missing(node, parent)
       end
     end
 
