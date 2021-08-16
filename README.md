@@ -53,6 +53,61 @@ puts Kenma.compile(body).source
 # => begin puts(("にゃーん" * 1)); puts(("にゃーん" * 3)); end
 ```
 
+### Macro defines
+
+```ruby
+require "kenma"
+
+using Kenma::Refine::Source
+using Kenma::Refine::Nodable
+
+# Macro module
+#   defined macros in
+#   priority is
+#     node macro > function macro > pattern macro
+module MyMacro
+  using Kenma::Macroable
+
+  # Node macro
+  # Replace the AST of a specific node with the AST of the return value
+  def frozen_string(str_node, parent_node)
+    ast { $str_node.freeze }
+  end
+  macro_node :STR, :frozen_string
+
+  # Function macro
+  # Replace the AST from which the function is called with the AST of the return value
+  def cat!(num_not = ast { 1 })
+    ast { "にゃーん" * $num_not }
+  end
+  macro_function :cat!
+
+  # Pattern macro
+  # Replace the AST that matches the pattern with the AST of the return value
+  def frozen(node, name:, value:)
+    ast { $name = $value.freeze }
+  end
+  macro_pattern pat { $name = $value }, :frozen
+end
+
+
+body = proc {
+  use_macro! MyMacro
+
+  "にゃーん" # => "にゃーん".freeze
+
+  puts cat!     # => puts "にゃーん"
+  puts cat!(3)  # => puts "にゃーん" * 3
+
+  value = [1, 2, 3]  # => value = [1, 2, 3].freeze
+}
+
+result = Kenma.compile(body)
+puts result.source
+# => begin "にゃーん".freeze(); puts(("にゃーん" * 1)); puts(("にゃーん" * 3)); (value = [1, 2, 3].freeze()); end
+```
+
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.

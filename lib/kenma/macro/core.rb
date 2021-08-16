@@ -5,6 +5,7 @@ require_relative "./use_macro.rb"
 require_relative "./basic.rb"
 require_relative "./macro_function.rb"
 require_relative "./macro_node.rb"
+require_relative "./macro_pattern.rb"
 
 module Kenma
   module Macro
@@ -15,6 +16,7 @@ module Kenma
       include Macro::UseMacro
       include Macro::Basic
       include Macro::MacroFunction
+      include Kenma::Macro::MacroPattern
 
       def self.eval(bind: nil, &block)
         bind = block.binding unless bind
