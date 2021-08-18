@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "kenma/macro/frozen_constant"
 
 RSpec.describe Kenma::NodeConverter do
