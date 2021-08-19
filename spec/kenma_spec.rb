@@ -135,4 +135,45 @@ RSpec.describe Kenma do
       } }
     end
   end
+
+  describe ".ast" do
+    using Kenma::Macroable
+
+    let(:context) { {} }
+    subject { ast(context, &body) }
+
+    context "1 + 2" do
+      let(:body) { proc { 1 + 2 } }
+      it { is_expected.to have_attributes(type: :OPCALL) }
+      it { is_expected.to eq_ast &body }
+    end
+
+    context "puts 42" do
+      let(:body) { proc { puts 42 } }
+      it { is_expected.to have_attributes(type: :FCALL) }
+      it { is_expected.to eq_ast &body }
+    end
+
+    context "stringify! 1 + 2" do
+      let(:body) { proc { stringify! 1 + 2 } }
+      it { expect(subject.type).to eq :LIT }
+      it { is_expected.to eq_ast { "(1 + 2)" } }
+    end
+
+    context "with context" do
+      let(:cat_macro) {
+        Module.new {
+          def cat!
+            ast { catcat }
+          end
+          macro_function :cat!
+        }
+      }
+      let(:context) {
+        { use_macros: [cat_macro] }
+      }
+      let(:body) { proc { puts cat! } }
+      it { is_expected.to eq_ast { puts catcat } }
+    end
+  end
 end

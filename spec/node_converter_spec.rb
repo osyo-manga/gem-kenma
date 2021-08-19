@@ -22,7 +22,7 @@ RSpec.describe Kenma::NodeConverter do
         before do
           expect(converter).to receive(:node_missing)
         end
-        it { converter.convert(ast { vcall }.children.last) }
+        it { converter.convert(ast { vcall }) }
       end
 
       context "args value and return value different" do
@@ -41,7 +41,7 @@ RSpec.describe Kenma::NodeConverter do
         before do
           expect(converter).not_to receive(:node_missing)
         end
-        it { converter.convert(ast { vcall }.children.last) }
+        it { converter.convert(ast { vcall }) }
       end
     end
   end

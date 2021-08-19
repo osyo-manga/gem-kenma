@@ -6,8 +6,10 @@ require_relative "./refine/node_to_a.rb"
 module Kenma
   module Macroable
     refine Kernel do
-      def ast(&block)
-        Macro::Core.convert_of(block)
+      def ast(context = {}, &body)
+        bind = body.binding unless context[:bind]
+        node = RubyVM::AbstractSyntaxTree.of(body).children.last
+        Kenma::Macro::Core.convert(node, { bind: bind }.merge(context))
       end
     end
 

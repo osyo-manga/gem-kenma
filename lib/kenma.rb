@@ -2,6 +2,7 @@
 
 require_relative "./kenma/version"
 require_relative "./kenma/macro/core.rb"
+require_relative "./kenma/iteration.rb"
 
 module Kenma
   def self.of(body)

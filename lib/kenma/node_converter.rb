@@ -19,9 +19,13 @@ module Kenma
       }
     end
 
+    def self.convert(node, context = {})
+      new(context).convert(node)
+    end
+
     def self.convert_of(body, context = {})
-      bind = body.binding unless bind
-      new({ bind: bind }.merge(context)).convert(RubyVM::AbstractSyntaxTree.of(body))
+      bind = body.binding unless context[:bind]
+      convert(RubyVM::AbstractSyntaxTree.of(body), { bind: bind }.merge(context))
     end
 
     private
@@ -34,7 +38,7 @@ module Kenma
     end
 
     def scope_context_switch(context, &block)
-      self.class.new(scope_context).then(&block)
+      self.class.new(scope_context.merge(context)).then(&block)
     end
 
     def _convert(node, &block)
