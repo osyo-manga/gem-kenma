@@ -8,4 +8,5 @@ gemspec
 gem "rake", "~> 13.0"
 
 gem "rspec", "~> 3.0"
+gem "super_diff"
 gem "rensei", github: "osyo-manga/gem-rensei", branch: :master
