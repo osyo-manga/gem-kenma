@@ -2,6 +2,7 @@
 
 require_relative "./refine/source.rb"
 require_relative "./refine/nodable.rb"
+require_relative "./refine/node_iteration.rb"
 
 module Kenma
   class NodeConverter
