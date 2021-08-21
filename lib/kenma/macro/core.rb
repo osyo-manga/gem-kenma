@@ -31,7 +31,7 @@ module Kenma
         if node.type == :SCOPE
           return scope_context_switch(scope_context) { |converter|
             children = [*node.children.take(node.children.size-1), converter.convert(node.children.last)]
-                        .reject { |it| Symbol === it && it == :KENMA_MACRO_EMPTY_NODE }
+                        .reject { |it| KENMA_MACRO_EMPTY_NODE == it }
             send_node(:NODE_SCOPE, [:SCOPE, children], node)
           }
         end

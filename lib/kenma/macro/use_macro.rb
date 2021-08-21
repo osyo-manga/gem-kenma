@@ -19,7 +19,7 @@ module Kenma
         macro_mod = bind.eval(node.source)
         use_macros << macro_mod
         extend macro_mod
-        :KENMA_MACRO_EMPTY_NODE
+        Kenma::NodeConverter::KENMA_MACRO_EMPTY_NODE
       end
       macro_function :use_macro!
 

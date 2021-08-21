@@ -9,6 +9,8 @@ module Kenma
     using Kenma::Refine::Source
     using Kenma::Refine::Nodable
 
+    KENMA_MACRO_EMPTY_NODE = Object.new.freeze
+
     def initialize(context = {})
       @scope_context = context
     end
@@ -48,7 +50,7 @@ module Kenma
       children = node.children
       converted_children = children
         .map { |node| _convert(node) { |child| block.call(child, node) } }
-        .reject { |it| Symbol === it && it == :KENMA_MACRO_EMPTY_NODE }
+        .reject { |it| KENMA_MACRO_EMPTY_NODE == it }
 
       if converted_children == children
         node
