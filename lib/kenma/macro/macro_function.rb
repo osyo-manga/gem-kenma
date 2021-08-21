@@ -31,10 +31,8 @@ module Kenma
           end
 
           def send_macro_function(method_name, args, &block)
-            if macro_functions.include?(method_name)
-              converted_args = convert(args)
-              send(method_name, *converted_args&.children&.compact, &block)
-            end
+            converted_args = convert(args)
+            send(method_name, *converted_args&.children&.compact, &block)
           end
         end
       }
@@ -44,14 +42,22 @@ module Kenma
       def _FCALL_send_macro_function(node, parent)
         return node if parent&.type == :ITER
         method_name, args = node.children
-        send_macro_function(method_name, args) || node
+        if macro_functions.include?(method_name)
+          send_macro_function(method_name, args)
+        else
+          node
+        end
       end
       macro_node :FCALL, :_FCALL_send_macro_function
 
       def _ITER_send_macro_function(node, parent)
         fcall, scope = node.children
         method_name, args = fcall.children
-        send_macro_function(method_name, args) { scope } || node
+        if macro_functions.include?(method_name)
+          send_macro_function(method_name, args) { scope }
+        else
+          node
+        end
       end
       macro_node :ITER, :_ITER_send_macro_function
     end

@@ -18,7 +18,7 @@ module Kenma
     def convert(node)
       _convert(node) { |node, parent|
         method_name = "NODE_#{node.type}"
-        send_node(method_name, node, parent)
+        send_node(method_name, node, parent) || KENMA_MACRO_EMPTY_NODE
       }
     end
 
