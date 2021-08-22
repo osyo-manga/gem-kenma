@@ -25,19 +25,19 @@ module Kenma
       block.call(node) if block
     end
 
-    def convert_node(node, &block)
+    def convert_node(node, parent = nil, &block)
       return node unless node.node?
 
       children = node.children
       converted_children = children
-        .map { |node| convert_node(node) { |child| block.call(child, node) || KENMA_ITERATION_MACRO_EMPTY_NODE } }
+        .map { |child| convert_node(child, node) { |node, parent| block.call(node, parent) || KENMA_ITERATION_MACRO_EMPTY_NODE } }
         .reject { |it| KENMA_ITERATION_MACRO_EMPTY_NODE == it }
 
       if converted_children == children
         node
       else
         [node.type, converted_children]
-      end.then { |node| block.call(node, nil) }
+      end.then { |node| block.call(node, parent) }
     end
 
     def find_convert_node(node, pat, &block)

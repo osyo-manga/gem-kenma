@@ -23,6 +23,7 @@ RSpec.describe Kenma::Iteration do
         end
       } }
       it { expect { subject }.to change { @result }.to be_all { |it| it.type == :DASGN_CURR } }
+      it { expect { subject }.to change { @result }.to have_attributes(count: 4) }
 
       context "pickup types" do
         let(:body) { proc {
@@ -91,8 +92,9 @@ RSpec.describe Kenma::Iteration do
       using Kenma::Refine::Nodable
 
       let(:body) { proc { 1 + 2 } }
-      let(:block) { proc { |node|
+      let(:block) { proc { |node, parent|
         if node.type == :OPCALL
+          @parent = parent
           left, op, right = node.children
           [:OPCALL, [left, :-, right]]
         else
@@ -109,6 +111,7 @@ RSpec.describe Kenma::Iteration do
           be_kind_of(RubyVM::AbstractSyntaxTree::Node)
         ]
       end
+      it { expect { subject }.to change { @parent }.to have_attributes(type: :SCOPE) }
     end
 
     context "non matching" do
@@ -158,6 +161,35 @@ RSpec.describe Kenma::Iteration do
           be_kind_of(RubyVM::AbstractSyntaxTree::Node)
         ]
       end
+    end
+
+    context "hook LIT" do
+      using Kenma::Refine::Nodable
+
+      let(:body) { proc {
+        1 - 2
+      } }
+      let(:block) { proc { |node, parent|
+        if node.type == :LIT && node.children[0] == 1
+          @parent1 = parent
+        elsif node.type == :LIT && node.children[0] == 2
+          @parent2 = parent
+        end
+        node
+      } }
+      it { expect(subject).to eq node }
+      it { expect(subject).to eq_ast { 1 - 2 } }
+      it { expect(subject).to be_kind_of RubyVM::AbstractSyntaxTree::Node }
+      it { expect(subject.children[2]).to be_kind_of RubyVM::AbstractSyntaxTree::Node }
+      it do
+        expect(subject.children[2].children).to match [
+          be_kind_of(RubyVM::AbstractSyntaxTree::Node),
+          :-,
+          be_kind_of(RubyVM::AbstractSyntaxTree::Node)
+        ]
+      end
+      it { expect { subject }.to change { @parent1 }.to have_attributes(type: :OPCALL) }
+      it { expect { subject }.to change { @parent2 }.to have_attributes(type: eq(:LIST).or(eq :ARRAY)) }
     end
   end
 
