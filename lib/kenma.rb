@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require_relative "./kenma/version"
-# require_relative "./kenma/macro/core.rb"
 require_relative "./kenma/pre_processor.rb"
 require_relative "./kenma/iteration.rb"
 
