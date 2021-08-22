@@ -132,6 +132,33 @@ RSpec.describe Kenma::Iteration do
         ]
       end
     end
+
+    context "return nil" do
+      using Kenma::Refine::Nodable
+
+      let(:body) { proc {
+        1 - 2
+        3 + 4
+        5 - 6
+      } }
+      let(:block) { proc { |node|
+        if node.type == :OPCALL && node.children[1] == :-
+          nil
+        else
+          node
+        end
+      } }
+      it { expect(subject).to eq_ast { 3 + 4 } }
+      it { expect(subject).to be_kind_of Array }
+      it { expect(subject[1]).to be_kind_of Array }
+      it do
+        expect(subject[1][2][1][0].children).to match [
+          be_kind_of(RubyVM::AbstractSyntaxTree::Node),
+          :+,
+          be_kind_of(RubyVM::AbstractSyntaxTree::Node)
+        ]
+      end
+    end
   end
 
   describe ".find_convert_node" do

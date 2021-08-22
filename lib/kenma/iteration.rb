@@ -6,6 +6,9 @@ module Kenma
   module Iteration
     using Kenma::Refine::Nodable
 
+    KENMA_ITERATION_MACRO_EMPTY_NODE = Object.new.freeze
+    private_constant :KENMA_ITERATION_MACRO_EMPTY_NODE
+
     module_function
 
     def each_node(node, &block)
@@ -27,7 +30,8 @@ module Kenma
 
       children = node.children
       converted_children = children
-        .map { |node| convert_node(node) { |child| block.call(child, node) } }
+        .map { |node| convert_node(node) { |child| block.call(child, node) || KENMA_ITERATION_MACRO_EMPTY_NODE } }
+        .reject { |it| KENMA_ITERATION_MACRO_EMPTY_NODE == it }
 
       if converted_children == children
         node
