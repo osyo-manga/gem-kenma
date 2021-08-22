@@ -9,9 +9,6 @@ module Kenma
     using Kenma::Refine::Source
     using Kenma::Refine::Nodable
 
-    KENMA_MACRO_EMPTY_NODE = Object.new.freeze
-    private_constant :KENMA_MACRO_EMPTY_NODE
-
     def initialize(context = {})
       @scope_context = context
     end
@@ -19,7 +16,7 @@ module Kenma
     def convert(node)
       _convert(node) { |node, parent|
         method_name = "NODE_#{node.type}"
-        send_node(method_name, node, parent) || KENMA_MACRO_EMPTY_NODE
+        send_node(method_name, node, parent)
       }
     end
 
@@ -33,6 +30,9 @@ module Kenma
     end
 
     private
+
+    KENMA_MACRO_EMPTY_NODE = Object.new.freeze
+    private_constant :KENMA_MACRO_EMPTY_NODE
 
     attr_reader :bind
     attr_reader :scope_context
@@ -50,7 +50,7 @@ module Kenma
 
       children = node.children
       converted_children = children
-        .map { |node| _convert(node) { |child| block.call(child, node) } }
+        .map { |node| _convert(node) { |child| block.call(child, node) || KENMA_MACRO_EMPTY_NODE } }
         .reject { |it| KENMA_MACRO_EMPTY_NODE == it }
 
       if converted_children == children
