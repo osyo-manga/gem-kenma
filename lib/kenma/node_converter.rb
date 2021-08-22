@@ -10,6 +10,7 @@ module Kenma
     using Kenma::Refine::Nodable
 
     KENMA_MACRO_EMPTY_NODE = Object.new.freeze
+    private_constant :KENMA_MACRO_EMPTY_NODE
 
     def initialize(context = {})
       @scope_context = context
