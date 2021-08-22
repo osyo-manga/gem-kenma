@@ -9,7 +9,7 @@ module Kenma
       def ast(context = {}, &body)
         bind = body.binding unless context[:bind]
         node = RubyVM::AbstractSyntaxTree.of(body).children.last
-        Kenma::Macro::Core.convert(node, { bind: bind }.merge(context))
+        Kenma.compile(node, { bind: bind }.merge(context))
       end
     end
 

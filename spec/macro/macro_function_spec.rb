@@ -8,7 +8,7 @@ RSpec.describe Kenma::Macro::MacroFunction do
   describe "macro_function" do
     using Kenma::Macroable
 
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     context "return nil" do
       let(:macro_module) {

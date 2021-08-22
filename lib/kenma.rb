@@ -1,19 +1,16 @@
 # frozen_string_literal: true
 
 require_relative "./kenma/version"
-require_relative "./kenma/macro/core.rb"
+# require_relative "./kenma/macro/core.rb"
+require_relative "./kenma/pre_processor.rb"
 require_relative "./kenma/iteration.rb"
 
 module Kenma
-  def self.of(body)
-    Macro::Core.convert_of(body)
+  def self.compile(body, context = {})
+    PreProcessor.compile(body, context)
   end
 
-  def self.pre_compile(body)
-    Macro::Core.convert_of(body)
-  end
-
-  def self.compile(body)
-    Macro::Core.convert_of(body)
+  def self.compile_of(body, context = {})
+    PreProcessor.compile_of(body, context)
   end
 end

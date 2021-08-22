@@ -6,7 +6,7 @@ RSpec.describe Kenma::Macro::FrozenConstant do
   using Kenma::Refine::Source
 
   describe "frozen constant" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     context "defined constant variable" do
       let(:body) {

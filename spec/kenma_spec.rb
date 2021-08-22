@@ -15,7 +15,7 @@ RSpec.describe Kenma do
       macro_function :cat!
     end
 
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     context "with use_macro!" do
       let(:body) { proc {
@@ -27,7 +27,7 @@ RSpec.describe Kenma do
   end
 
   describe "scope_context" do
-    subject { Kenma::Macro::Core.convert_of(body) }
+    subject { Kenma.compile_of(body) }
     module CatMacro
       using Kenma::Macroable
 

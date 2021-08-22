@@ -31,7 +31,7 @@ module Kenma
           end
 
           def send_macro_function(method_name, args, &block)
-            converted_args = convert(args)
+            converted_args = compile(args)
             send(method_name, *converted_args&.children&.compact, &block)
           end
         end

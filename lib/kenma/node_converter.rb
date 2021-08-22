@@ -20,15 +20,6 @@ module Kenma
       }
     end
 
-    def self.convert(node, context = {})
-      new(context).convert(node)
-    end
-
-    def self.convert_of(body, context = {})
-      bind = body.binding unless context[:bind]
-      convert(RubyVM::AbstractSyntaxTree.of(body), { bind: bind }.merge(context))
-    end
-
     private
 
     KENMA_MACRO_EMPTY_NODE = Object.new.freeze
@@ -47,6 +38,14 @@ module Kenma
 
     def _convert(node, &block)
       return node unless node.node?
+
+      if node.type == :SCOPE
+        return scope_context_switch(scope_context) { |converter|
+          children = [*node.children.take(node.children.size-1), converter.convert(node.children.last)]
+                      .reject { |it| KENMA_MACRO_EMPTY_NODE == it }
+          send_node(:NODE_SCOPE, [:SCOPE, children], node)
+        }
+      end
 
       children = node.children
       converted_children = children

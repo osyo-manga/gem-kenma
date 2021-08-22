@@ -49,7 +49,7 @@ body = proc {
   puts cat!(3)
 }
 # Apply Macro functions
-puts Kenma.compile(body).source
+puts Kenma.compile_of(body).source
 # => begin puts(("にゃーん" * 1)); puts(("にゃーん" * 3)); end
 ```
 
@@ -102,7 +102,7 @@ body = proc {
   value = [1, 2, 3]  # => value = [1, 2, 3].freeze
 }
 
-result = Kenma.compile(body)
+result = Kenma.compile_of(body)
 puts result.source
 # => begin "にゃーん".freeze(); puts(("にゃーん" * 1)); puts(("にゃーん" * 3)); (value = [1, 2, 3].freeze()); end
 ```

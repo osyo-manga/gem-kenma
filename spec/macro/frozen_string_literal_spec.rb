@@ -6,7 +6,7 @@ RSpec.describe Kenma::Macro::FrozenStringLiteral do
   using Kenma::Refine::Source
 
   describe "frozen string literal" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     context "defined string literals" do
       let(:body) {

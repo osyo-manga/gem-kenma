@@ -7,7 +7,7 @@ RSpec.describe Kenma::Macro::MacroFunction do
   using Kenma::Macroable
 
   describe ".macro_pattern" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     context "define single pat" do
       let(:macro_module) {

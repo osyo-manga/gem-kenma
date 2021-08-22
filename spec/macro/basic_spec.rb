@@ -6,7 +6,7 @@ RSpec.describe Kenma::Macro::UseMacro do
   using Kenma::Refine::Source
 
   describe "symbolify!" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     let(:body) {
       proc {
@@ -16,7 +16,7 @@ RSpec.describe Kenma::Macro::UseMacro do
     it { is_expected.to eq_ast { :tag } }
 
     context "with space" do
-      subject { Kenma.compile(body) }
+      subject { Kenma.compile_of(body) }
 
       let(:body) {
         proc {
@@ -47,7 +47,7 @@ RSpec.describe Kenma::Macro::UseMacro do
   end
 
   describe "stringify!" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     let(:body) {
       proc {
@@ -68,7 +68,7 @@ RSpec.describe Kenma::Macro::UseMacro do
   end
 
   describe "unstringify!" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     let(:body) {
       proc {
@@ -89,7 +89,7 @@ RSpec.describe Kenma::Macro::UseMacro do
   end
 
   describe "node_bind!" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     context "defined AST::Node variable" do
       let(:body) {
@@ -122,7 +122,7 @@ RSpec.describe Kenma::Macro::UseMacro do
   end
 
   describe "$variable" do
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     context "defined $node variable" do
       let(:body) {

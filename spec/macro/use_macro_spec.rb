@@ -24,7 +24,7 @@ RSpec.describe Kenma::Macro::UseMacro do
       macro_function :dog!
     end
 
-    subject { Kenma.compile(body) }
+    subject { Kenma.compile_of(body) }
 
     let(:body) { proc {
       use_macro! CatMacro
