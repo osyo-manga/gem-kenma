@@ -27,7 +27,7 @@ module Kenma
       return nil if node.nil? || pat.nil?
       return nil if !node.node? || !pat.node?
 
-      if pat.type == :GASGN && node.type.to_s =~ /ASGN/
+      if pat.type == :GASGN && node.type.to_s =~ /ASGN|CDECL/
         match_result = _match(node.children.last, pat.children.last)
         if match_result
           tag = pat.children.first.to_s.delete_prefix("$").to_sym

@@ -91,6 +91,7 @@ RSpec.describe Kenma::Macro::MacroFunction do
       it { expect(pat { cat!($num) } === ast { cat!(1) }).to match num: eq_ast { 1 } }
       it { expect(pat { $left + $right } === ast { 1 + 2 }).to match left: eq_ast { 1 }, right: eq_ast { 2 } }
       it { expect(pat { $name = $value } === ast { name = 42 }).to match name: :name, value: eq_ast { 42 } }
+      it { expect(pat { $name = $value } === ast { HOGE = 42 }).to match name: :HOGE, value: eq_ast { 42 } }
       it { expect(pat { $name = 10 } === ast { name = 42 }).to be_nil }
       it { expect(pat { $name[$index] = $value } === ast { users[1] = 42 }).to match name: eq_ast { users }, index: eq_ast { 1 }, value: eq_ast { 42 } }
       it { expect(pat { $name[1] = $value } === ast { users[1] = 42 }).to match name: eq_ast { users }, value: eq_ast { 42 } }
