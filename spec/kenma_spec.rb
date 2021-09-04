@@ -26,6 +26,33 @@ RSpec.describe Kenma do
     end
   end
 
+  describe ".macro_eval" do
+    using Kenma::Macroable
+
+    let(:cat_macro) {
+      Module.new {
+
+        def cat!
+          ast { "cat" }
+        end
+        macro_function :cat!
+      }
+    }
+
+    subject { Kenma.macro_eval(&body) }
+
+    context "with use_macro!" do
+      let(:body) {
+        outof_scope = "hoge"
+        proc {
+          use_macro! cat_macro
+          cat! + cat! + "hoge"
+        }
+      }
+      it { is_expected.to eq "catcathoge" }
+    end
+  end
+
   describe "scope_context" do
     subject { Kenma.compile_of(body) }
     module CatMacro
