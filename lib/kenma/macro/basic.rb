@@ -16,9 +16,9 @@ module Kenma
 
       def stringify!(args)
         if args.respond_to?(:source)
-          [:LIT, [args.source]]
+          [:STR, [args.source]]
         else
-          [:LIT, [args.to_s]]
+          [:STR, [args.to_s]]
         end
       end
       macro_function :stringify!

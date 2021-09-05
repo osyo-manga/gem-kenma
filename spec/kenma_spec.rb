@@ -183,7 +183,7 @@ RSpec.describe Kenma do
 
     context "stringify! 1 + 2" do
       let(:body) { proc { stringify! 1 + 2 } }
-      it { expect(subject.type).to eq :LIT }
+      it { expect(subject.type).to eq :STR }
       it { is_expected.to eq_ast { "(1 + 2)" } }
     end
 
