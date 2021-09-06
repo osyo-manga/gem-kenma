@@ -38,6 +38,11 @@ module Kenma
       elsif pat.type == :GVAR
         tag = pat.children.first.to_s.delete_prefix("$").to_sym
         { tag => node }
+      # Add Support: pat { [*$node] } === ast { [a, b, c] } # => { node: [a, b, c] }
+      # Not Support: pat { [$first, *$node] } === ast { [a, b, c] } # => nil
+      elsif pat.type === :SPLAT && pat.children.first.type == :GVAR
+        tag = pat.children.first.children.first.to_s.delete_prefix("$").to_sym
+        { tag => node }
       elsif node.type == pat.type && node.children.size == pat.children.size
         node.children.zip(pat.children).inject({}) { |result, (src, pat)|
           if match_result = _match(src, pat)

@@ -97,6 +97,12 @@ RSpec.describe Kenma::Macro::MacroFunction do
       it { expect(pat { $name[1] = $value } === ast { users[1] = 42 }).to match name: eq_ast { users }, value: eq_ast { 42 } }
       it { expect(pat { $name[1] = $value } === ast { users[2] = 42 }).to be_nil }
       it { expect(pat { $a < $b < $c } === ast { min < a < max }).to match a: eq_ast { min }, b: eq_ast { a }, c: eq_ast { max } }
+      it { expect(pat { [$node] } === ast { [a] }).to match node: eq_ast { a } }
+      it { expect(pat { [$node] } === ast { [a, b, c] }).to be_nil }
+      it { expect(pat { [*$node] } === ast { [a, b, c] }).to match node: eq_ast { [a, b, c] } }
+      it { expect(pat { func(*$args) } === ast { func(a, b, c) }).to match args: eq_ast { [a, b, c] } }
+      # Not support
+      xit { expect(pat { [$first, *$node] } === ast { [a, b, c] }).to match first: eq_ast { a }, node: eq_ast { [b, c] } }
     end
   end
 end
