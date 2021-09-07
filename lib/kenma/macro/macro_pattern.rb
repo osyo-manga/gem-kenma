@@ -6,21 +6,17 @@ require_relative "./macro_node.rb"
 module Kenma
   using Kenma::Refine::Nodable
 
-  class PatternCapture < Struct.new(:pat)
-    def initialize(&pat)
-      self.pat = pat
+  class PatternCapture < Struct.new(:pat_node)
+    def initialize(pat_node)
+      self.pat_node = pat_node
     end
 
     def match(node)
-      _match(node, pat_ast)
+      _match(node, pat_node)
     end
     alias_method :===, :match
 
     private
-
-    def pat_ast
-      RubyVM::AbstractSyntaxTree.of(pat).children.last
-    end
 
     def _match(node, pat)
       return {} if node == pat
@@ -60,7 +56,11 @@ module Kenma
   module Macroable
     refine Kernel do
       def pat(&block)
-        PatternCapture.new(&block)
+        pat_node(RubyVM::AbstractSyntaxTree.of(block).children.last)
+      end
+
+      def pat_node(node)
+        PatternCapture.new(node)
       end
     end
 
